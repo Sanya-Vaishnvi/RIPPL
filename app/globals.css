@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #efeee9;
+  --color-paper-raised: #e6e4dc;
+  --color-ink: #1c1b19;
+  --color-ink-soft: #55534c;
+  --color-line: #d8d5cb;
+  --color-accent: #2f3e63;
+  --color-accent-soft: #c9d0de;
+
+  --font-display: var(--font-display-family), serif;
+  --font-body: var(--font-body-family), sans-serif;
+}
+
+@layer base {
+  ::selection {
+    background: var(--color-accent-soft);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  .animate-rise {
+    animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.6em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise {
+    animation: none;
+  }
+}
