@@ -9,6 +9,12 @@
   --color-accent: #2f3e63;
   --color-accent-soft: #c9d0de;
 
+  --color-raspberry: #c43f63;
+  --color-mustard: #dca83a;
+  --color-mustard-deep: #b08326;
+  --color-lilac: #a992c9;
+  --color-lilac-deep: #8267a3;
+
   --font-display: var(--font-display-family), serif;
   --font-body: var(--font-body-family), sans-serif;
 }

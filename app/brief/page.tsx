@@ -1,18 +1,21 @@
 "use client";
 
 import { useState } from "react";
-
+import { useRouter } from "next/navigation";
 import { SiteHeader } from "../components/header";
 import { SiteFooter } from "../components/footer";
 import { BriefField } from "../components/brief-field";
-import { BriefFormData, emptyBrief, REQUIRED_BRIEF_FIELDS } from "../../lib/brief-types";
+import {
+  BriefFormData,
+  emptyBrief,
+  REQUIRED_BRIEF_FIELDS,
+} from "../../lib/brief-types";
 
 export default function BriefPage() {
+  const router = useRouter();
   const [brief, setBrief] = useState<BriefFormData>(emptyBrief);
-  const [submitted, setSubmitted] = useState(false);
 
   const update = (field: keyof BriefFormData) => (value: string) => {
-    setSubmitted(false);
     setBrief((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -27,7 +30,7 @@ export default function BriefPage() {
     if (typeof window !== "undefined") {
       window.sessionStorage.setItem("campaign-brief", JSON.stringify(brief));
     }
-    setSubmitted(true);
+    router.push("/creative-map");
   }
 
   return (
@@ -124,11 +127,6 @@ export default function BriefPage() {
             {!isComplete && (
               <span className="text-sm text-ink-soft">
                 {totalRequired - answeredRequired} more to go
-              </span>
-            )}
-            {isComplete && submitted && (
-              <span className="text-sm text-ink-soft">
-                Brief saved. Creative diagnosis is next, coming in a later milestone.
               </span>
             )}
           </div>
