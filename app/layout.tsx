@@ -1,24 +1,23 @@
 import type { Metadata } from "next";
-import { Fraunces, IBM_Plex_Sans } from "next/font/google";
+import { Lato, Chewy } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
+const lato = Lato({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-display-family",
-  display: "swap",
-});
-
-const plexSans = IBM_Plex_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "700", "900"],
   variable: "--font-body-family",
   display: "swap",
 });
 
+const chewy = Chewy({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-wordmark-family",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "AI Campaign Studio",
+  title: "rippl",
   description:
     "A creative direction workspace where AI explores campaign territory while your decisions stay exactly as you left them.",
 };
@@ -31,9 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fraunces.variable} ${plexSans.variable} bg-paper text-ink font-body antialiased`}
+        className={`${lato.variable} ${chewy.variable} bg-mustard font-body antialiased`}
       >
-        {children}
+        <div className="p-1.5 sm:p-2">
+          <div className="min-h-screen rounded-xl bg-paper">{children}</div>
+        </div>
       </body>
     </html>
   );

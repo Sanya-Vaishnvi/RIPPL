@@ -15,8 +15,9 @@
   --color-lilac: #a992c9;
   --color-lilac-deep: #8267a3;
 
-  --font-display: var(--font-display-family), serif;
   --font-body: var(--font-body-family), sans-serif;
+  --font-display: var(--font-body-family), sans-serif;
+  --font-wordmark: var(--font-wordmark-family), cursive;
 }
 
 @layer base {

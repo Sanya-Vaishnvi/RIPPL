@@ -14,18 +14,11 @@ export function CreativeMap({ territories }: CreativeMapProps) {
   const selected = territories.find((t) => t.id === selectedId) ?? null;
 
   return (
-    <div className="mx-auto w-full max-w-2xl">
-      <div className="relative overflow-hidden rounded-xl border border-line bg-paper px-8 py-10 sm:px-10 sm:py-12">
-        <svg
-          viewBox="0 0 400 300"
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-12 -right-16 h-56 w-72 opacity-20"
-        >
-          <ellipse cx="230" cy="110" rx="140" ry="95" fill="#C43F63" transform="rotate(15 230 110)" />
-          <ellipse cx="140" cy="190" rx="110" ry="75" fill="#DCA83A" transform="rotate(-20 140 190)" />
-          <ellipse cx="190" cy="150" rx="80" ry="60" fill="#A992C9" transform="rotate(5 190 150)" />
-        </svg>
-
+    <div className="relative mx-auto w-full max-w-2xl">
+      <div
+        className="relative rounded-xl border-2 bg-paper px-8 py-10 sm:px-10 sm:py-12"
+        style={{ borderColor: "rgba(196, 63, 99, 0.65)" }}
+      >
         <p className="pointer-events-none absolute top-3 left-1/2 -translate-x-1/2 text-xs text-ink-soft">
           emotional
         </p>
