@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Territory } from "../../lib/territory-types";
 
 interface CreativeMapProps {
@@ -8,6 +9,7 @@ interface CreativeMapProps {
 }
 
 export function CreativeMap({ territories }: CreativeMapProps) {
+  const router = useRouter();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [whyOpen, setWhyOpen] = useState(false);
 
@@ -112,6 +114,7 @@ export function CreativeMap({ territories }: CreativeMapProps) {
           </p>
           <button
             type="button"
+            onClick={() => router.push(`/canvas?territory=${selected.id}`)}
             className="mt-4 bg-accent px-5 py-2.5 text-sm text-paper transition-colors hover:bg-ink"
           >
             build this campaign
