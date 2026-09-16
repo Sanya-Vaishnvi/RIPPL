@@ -25,7 +25,10 @@ export function HumanAIDirection({ territory, direction }: HumanAIDirectionProps
 
   function handleGiveAlternatives() {
     if (disabled) return;
-    direction.runRequest({ kind: "alternatives", field: "tagline" }, "Give alternatives");
+    direction.runRequest(
+      { kind: "alternatives", field: "tagline" },
+      "Give tagline alternatives"
+    );
   }
 
   function handleFreeTextSubmit(e: React.FormEvent) {
@@ -39,7 +42,7 @@ export function HumanAIDirection({ territory, direction }: HumanAIDirectionProps
     const label =
       parsed.kind === "transform"
         ? REQUEST_LABELS[parsed.type]
-        : `Give alternatives: ${FIELD_LABELS[parsed.field]}`;
+        : `Give ${FIELD_LABELS[parsed.field]} alternatives`;
     direction.runRequest(parsed, label);
     setFreeText("");
   }
@@ -66,7 +69,7 @@ export function HumanAIDirection({ territory, direction }: HumanAIDirectionProps
           onClick={handleGiveAlternatives}
           className="rounded-full border border-line bg-paper-raised px-4 py-2 text-sm text-ink transition-colors enabled:hover:border-accent enabled:hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Give alternatives
+          Give tagline alternatives
         </button>
       </div>
 

@@ -22,12 +22,19 @@ export function useCampaignDirection(
   const [pendingAlternatives, setPendingAlternatives] =
     useState<PendingAlternatives | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [lockedFields, setLockedFields] = useState<(keyof CampaignContent)[]>([]);
 
   const hasPendingDiff = previousCampaign !== null;
 
+  function toggleLock(field: keyof CampaignContent) {
+    setLockedFields((prev) =>
+      prev.includes(field) ? prev.filter((f) => f !== field) : [...prev, field]
+    );
+  }
+
   function runRequest(request: ParsedRequest, label: string) {
     setMessage(null);
-    const result = applyRequest(territoryId, campaign, request);
+    const result = applyRequest(territoryId, campaign, request, lockedFields);
 
     if (result.kind === "unavailable") {
       setMessage(result.message);
@@ -85,6 +92,8 @@ export function useCampaignDirection(
     hasPendingDiff,
     pendingAlternatives,
     message,
+    lockedFields,
+    toggleLock,
     runRequest,
     selectAlternative,
     keepChanges,

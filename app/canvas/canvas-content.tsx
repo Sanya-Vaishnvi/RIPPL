@@ -17,6 +17,8 @@ export function CanvasContent() {
   const initialCampaign = mockCampaigns[territory.id];
 
   const direction = useCampaignDirection(territory.id, initialCampaign);
+  const interactionDisabled =
+    direction.hasPendingDiff || direction.pendingAlternatives !== null;
 
   return (
     <div className="mx-auto w-full max-w-4xl">
@@ -31,7 +33,13 @@ export function CanvasContent() {
         Build the campaign
       </h1>
 
-      <CampaignCanvas territory={territory} campaign={direction.campaign} />
+      <CampaignCanvas
+        territory={territory}
+        campaign={direction.campaign}
+        lockedFields={direction.lockedFields}
+        onToggleLock={direction.toggleLock}
+        disabled={interactionDisabled}
+      />
 
       <HumanAIDirection territory={territory} direction={direction} />
     </div>
