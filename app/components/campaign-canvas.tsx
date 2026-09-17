@@ -1,4 +1,4 @@
-import { Territory } from "../../lib/territory-types";
+import { Territory, MapAxes, DEFAULT_AXES } from "../../lib/territory-types";
 import { CampaignContent } from "../../lib/campaign-mock";
 
 interface CampaignCanvasProps {
@@ -7,11 +7,12 @@ interface CampaignCanvasProps {
   lockedFields: (keyof CampaignContent)[];
   onToggleLock: (field: keyof CampaignContent) => void;
   disabled?: boolean;
+  axes?: MapAxes;
 }
 
-function axisLabel(x: number, y: number) {
-  const horizontal = x >= 50 ? "wild" : "calm";
-  const vertical = y <= 50 ? "emotional" : "practical";
+function axisLabel(x: number, y: number, axes: MapAxes) {
+  const horizontal = x >= 50 ? axes.x.high : axes.x.low;
+  const vertical = y <= 50 ? axes.y.high : axes.y.low;
   return `${vertical} • ${horizontal}`;
 }
 
@@ -54,6 +55,7 @@ export function CampaignCanvas({
   lockedFields,
   onToggleLock,
   disabled,
+  axes = DEFAULT_AXES,
 }: CampaignCanvasProps) {
   const tint = `${territory.color}1A`;
 
@@ -67,7 +69,7 @@ export function CampaignCanvas({
           {territory.name}
         </span>
         <span className="text-sm text-ink-soft">
-          [{axisLabel(territory.x, territory.y)}]
+          [{axisLabel(territory.x, territory.y, axes)}]
         </span>
       </div>
 

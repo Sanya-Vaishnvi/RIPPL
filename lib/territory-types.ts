@@ -1,3 +1,13 @@
+export interface AxisPair {
+  low: string;
+  high: string;
+}
+
+export interface MapAxes {
+  x: AxisPair;
+  y: AxisPair;
+}
+
 export interface Territory {
   id: string;
   name: string;
@@ -9,7 +19,15 @@ export interface Territory {
   angle: string;
   tagline: string;
   visualWorld: string;
+  strategicRegister?: string;
+  primaryMechanism?: string;
+  bigIdeaSeed?: string;
 }
+
+export const DEFAULT_AXES: MapAxes = {
+  x: { low: "calm", high: "wild" },
+  y: { low: "practical", high: "emotional" },
+};
 
 export const mockTerritories: Territory[] = [
   {

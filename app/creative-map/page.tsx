@@ -6,7 +6,7 @@ import Link from "next/link";
 import { SiteHeader } from "../components/header";
 import { SiteFooter } from "../components/footer";
 import { CreativeMap } from "../components/creative-map";
-import { mockTerritories } from "../../lib/territory-types";
+import { loadTerritoryData, StoredTerritoryData } from "../../lib/session-campaign";
 import { BriefFormData } from "../../lib/brief-types";
 
 const scatteredBerries = [
@@ -22,13 +22,15 @@ const scatteredBerries = [
 
 export default function CreativeMapPage() {
   const [brief, setBrief] = useState<BriefFormData | null>(null);
+  const [territoryData, setTerritoryData] = useState<StoredTerritoryData | null>(null);
 
   useEffect(() => {
-    const stored = window.sessionStorage.getItem("campaign-brief");
-    if (stored) {
-      setBrief(JSON.parse(stored) as BriefFormData);
-    }
+    const storedBrief = window.sessionStorage.getItem("campaign-brief");
+    if (storedBrief) setBrief(JSON.parse(storedBrief) as BriefFormData);
+    setTerritoryData(loadTerritoryData());
   }, []);
+
+  if (!territoryData) return null;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -58,9 +60,7 @@ export default function CreativeMapPage() {
         <div className="relative z-10 mx-auto mb-6 w-full max-w-2xl">
           <div className="mb-6 flex items-baseline justify-between">
             <p className="text-sm text-ink-soft">
-              {brief
-                ? `for: ${brief.product}, ${brief.audience}`
-                : "no brief found"}
+              {brief ? `for: ${brief.product}, ${brief.audience}` : "no brief found"}
             </p>
             <p className="text-sm text-ink-soft">3 territories</p>
           </div>
@@ -68,17 +68,21 @@ export default function CreativeMapPage() {
           <h1 className="font-display text-2xl text-ink sm:text-3xl">
             Choose a creative direction
           </h1>
+
+          {territoryData.source === "fallback" && territoryData.notice && (
+            <p className="mt-3 text-sm text-ink-soft italic">{territoryData.notice}</p>
+          )}
         </div>
 
         <div className="relative z-10">
-          <CreativeMap territories={mockTerritories} />
+          <CreativeMap
+            territories={territoryData.territories}
+            axes={territoryData.axes}
+          />
         </div>
 
         <div className="relative z-10 mx-auto mt-8 w-full max-w-2xl">
-          <Link
-            href="/brief"
-            className="text-sm text-accent underline underline-offset-4"
-          >
+          <Link href="/brief" className="text-sm text-accent underline underline-offset-4">
             ← back to the brief
           </Link>
         </div>

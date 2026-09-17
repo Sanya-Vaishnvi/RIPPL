@@ -6,15 +6,22 @@ import { CampaignCanvas } from "../components/campaign-canvas";
 import { HumanAIDirection } from "../components/human-ai-direction";
 import { mockTerritories } from "../../lib/territory-types";
 import { mockCampaigns } from "../../lib/campaign-mock";
+import { loadTerritoryData } from "../../lib/session-campaign";
+import { buildFallbackCampaign } from "../../lib/campaign-fallback";
 import { useCampaignDirection } from "../../lib/use-campaign-direction";
 
 export function CanvasContent() {
   const searchParams = useSearchParams();
   const territoryId = searchParams.get("territory");
 
+  const sessionData = loadTerritoryData();
   const territory =
-    mockTerritories.find((t) => t.id === territoryId) ?? mockTerritories[0];
-  const initialCampaign = mockCampaigns[territory.id];
+    sessionData.territories.find((t) => t.id === territoryId) ??
+    mockTerritories.find((t) => t.id === territoryId) ??
+    mockTerritories[0];
+
+  const initialCampaign =
+    mockCampaigns[territory.id] ?? buildFallbackCampaign(territory);
 
   const direction = useCampaignDirection(territory.id, initialCampaign);
   const interactionDisabled =
@@ -39,6 +46,7 @@ export function CanvasContent() {
         lockedFields={direction.lockedFields}
         onToggleLock={direction.toggleLock}
         disabled={interactionDisabled}
+        axes={sessionData.axes}
       />
 
       <HumanAIDirection territory={territory} direction={direction} />

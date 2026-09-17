@@ -10,10 +10,13 @@ import {
   emptyBrief,
   REQUIRED_BRIEF_FIELDS,
 } from "../../lib/brief-types";
+import { saveTerritoryData } from "../../lib/session-campaign";
 
 export default function BriefPage() {
   const router = useRouter();
   const [brief, setBrief] = useState<BriefFormData>(emptyBrief);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const update = (field: keyof BriefFormData) => (value: string) => {
     setBrief((prev) => ({ ...prev, [field]: value }));
@@ -25,12 +28,29 @@ export default function BriefPage() {
   const totalRequired = REQUIRED_BRIEF_FIELDS.length;
   const isComplete = answeredRequired === totalRequired;
 
-  function handleContinue() {
-    if (!isComplete) return;
+  async function handleContinue() {
+    if (!isComplete || isGenerating) return;
+    setError(null);
+    setIsGenerating(true);
+
     if (typeof window !== "undefined") {
       window.sessionStorage.setItem("campaign-brief", JSON.stringify(brief));
     }
-    router.push("/creative-map");
+
+    try {
+      const res = await fetch("/api/generate-territories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ brief }),
+      });
+      if (!res.ok) throw new Error("request failed");
+      const data = await res.json();
+      saveTerritoryData(data);
+      router.push("/creative-map");
+    } catch {
+      setError("Rippl couldn't reach the creative engine. Please try again.");
+      setIsGenerating(false);
+    }
   }
 
   return (
@@ -94,9 +114,7 @@ export default function BriefPage() {
           </div>
 
           <div className="mt-4">
-            <p className="mb-2 text-sm text-ink-soft">
-              A bit more, if you have it.
-            </p>
+            <p className="mb-2 text-sm text-ink-soft">A bit more, if you have it.</p>
             <BriefField
               id="brandPersonality"
               label="Brand personality or existing voice"
@@ -119,16 +137,17 @@ export default function BriefPage() {
             <button
               type="button"
               onClick={handleContinue}
-              disabled={!isComplete}
+              disabled={!isComplete || isGenerating}
               className="bg-accent px-6 py-3 text-base text-paper transition-colors enabled:hover:bg-ink disabled:cursor-not-allowed disabled:bg-line disabled:text-ink-soft"
             >
-              Continue
+              {isGenerating ? "Finding creative directions..." : "Continue"}
             </button>
-            {!isComplete && (
+            {!isComplete && !isGenerating && (
               <span className="text-sm text-ink-soft">
                 {totalRequired - answeredRequired} more to go
               </span>
             )}
+            {error && <span className="text-sm text-ink-soft">{error}</span>}
           </div>
         </div>
       </main>

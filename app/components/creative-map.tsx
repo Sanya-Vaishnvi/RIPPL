@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Territory } from "../../lib/territory-types";
+import { Territory, MapAxes, DEFAULT_AXES } from "../../lib/territory-types";
 
 interface CreativeMapProps {
   territories: Territory[];
+  axes?: MapAxes;
 }
 
-export function CreativeMap({ territories }: CreativeMapProps) {
+export function CreativeMap({ territories, axes = DEFAULT_AXES }: CreativeMapProps) {
   const router = useRouter();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [whyOpen, setWhyOpen] = useState(false);
@@ -22,16 +23,16 @@ export function CreativeMap({ territories }: CreativeMapProps) {
         style={{ borderColor: "rgba(196, 63, 99, 0.65)" }}
       >
         <p className="pointer-events-none absolute top-3 left-1/2 -translate-x-1/2 text-xs text-ink-soft">
-          emotional
+          {axes.y.high}
         </p>
         <p className="pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 text-xs text-ink-soft">
-          practical
+          {axes.y.low}
         </p>
         <p className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 -rotate-90 text-xs text-ink-soft">
-          calm
+          {axes.x.low}
         </p>
         <p className="pointer-events-none absolute top-1/2 right-1 -translate-y-1/2 -rotate-90 text-xs text-ink-soft">
-          wild
+          {axes.x.high}
         </p>
 
         <div className="relative h-72">
@@ -82,9 +83,8 @@ export function CreativeMap({ territories }: CreativeMapProps) {
       {whyOpen && (
         <div className="mt-1.5 rounded-md bg-paper-raised px-3 py-2.5">
           <p className="text-sm leading-relaxed text-ink-soft">
-            we chose calm↔wild and practical↔emotional because your brief
-            emphasized humor and emotional connection, these are the
-            dimensions where your directions actually differ.
+            these dimensions were chosen because they're where your three
+            directions actually differ from each other.
           </p>
         </div>
       )}
